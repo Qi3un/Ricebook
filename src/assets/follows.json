@@ -1,0 +1,42 @@
+{"follows":[
+	{
+		"name": "nm0",
+		"id": 0,
+		"avatar": "https://vignette.wikia.nocookie.net/rickandmorty/images/d/dd/Rick.png/revision/latest?cb=20131230003659",
+		"alt": "Photo of Rice",
+		"title": "Rick",
+		"subTitle": "Shit, I've run out of alcohol."
+	},
+	{
+		"name": "nm1",
+		"id": 1,
+		"avatar": "https://vignette.wikia.nocookie.net/rickandmorty/images/e/e8/Jessica.png/revision/latest/scale-to-width-down/360?cb=20150706222334",
+		"alt": "Photo of Jessica",
+		"title": "Jessica",
+		"subTitle": "Sad. I just broke up with Brad."
+	},
+	{
+		"name": "nm2",
+		"id": 2,
+		"avatar": "https://vignette.wikia.nocookie.net/rickandmorty/images/5/58/Beth_Smith.png/revision/latest/scale-to-width-down/271?cb=20151204220729",
+		"alt": "Photo of Beth",
+		"title": "Beth",
+		"subTitle": "I'm goning to be myself."
+	},
+	{
+		"name": "nm3",
+		"id": 3,
+		"avatar": "https://vignette.wikia.nocookie.net/rickandmorty/images/a/ad/Summer_is_cool.jpeg/revision/latest/scale-to-width-down/315?cb=20160919183158",
+		"alt": "Photo of Summer",
+		"title": "Summer",
+		"subTitle": "Ethan is a bitch who loves big boobs."
+	},
+	{
+		"name": "nm4",
+		"id": 4,
+		"avatar": "https://vignette.wikia.nocookie.net/rickandmorty/images/f/f1/Jerry_Smith.png/revision/latest/scale-to-width-down/326?cb=20160923151111",
+		"alt": "Photo of Jerry",
+		"title": "Jerry",
+		"subTitle": "I don't miss my family. At all."
+	}
+]}

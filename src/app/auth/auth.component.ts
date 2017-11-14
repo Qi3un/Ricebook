@@ -1,0 +1,169 @@
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  FormControl,
+  Validators,
+  FormGroup
+} from '@angular/forms';
+import {
+  CustomValidators
+} from 'ng2-validation';
+import {
+  ActivatedRoute,
+  Router
+} from '@angular/router';
+import {
+  LoginService
+} from './login.service';
+import {
+  user
+} from './user';
+
+import { Headers, Http } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/toPromise';
+import { resource } from '../resources';
+
+export const NAME_REGEX = /[a-zA-Z][a-zA-Z0-9]*/;
+export const EMAIL_REGEX = /\w+@\w+\.\w+/;
+export const PHONE_REGEX = /(\d){3}-(\d){3}-(\d){4}/;
+export const CODE_REGEX = /(\d){5}/;
+export const NETID_REGEX = /^[a-z]{2}[1-9][0-9]*/;
+export const PASS_REGEX = /\w+-\w+-\w+/;
+
+export class signData {
+  name: string;
+  disName: string;
+  email: string;
+  phone: string;
+  birth: Date;
+  code: string;
+  pass: string;
+  passConf: string;
+}
+
+export class loginData {
+  loginName: string;
+  loginPass: string;
+}
+
+@Component({
+  selector: 'app-auth',
+  templateUrl: './auth.component.html',
+  styleUrls: ['../app.component.css']
+})
+export class AuthComponent implements OnInit {
+
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private http: Http
+  ) {}
+
+  sign: signData;
+  log: loginData;
+  loginForm: FormGroup;
+  signForm: FormGroup;
+  maxDate: Date;
+  now: Date;
+  validUser: boolean;
+
+  verify(name: string, password: string): void {
+    this.validUser = this.loginService.login(name, password);
+    if (this.validUser) {
+      this.router.navigate(['../article'], {
+        relativeTo: this.route
+      });
+    }
+  }
+
+  reset() {
+    this.validUser = true;
+  }
+
+/////////////////////////////////////////////////////////////////////
+
+  /* this is for test the cross origin resource sharing */
+  headlines: string;
+  getHeadlines(): Promise<string> {
+
+    return this.http.get("http://localhost:3000/headlines")
+                    .toPromise()
+                    .then(r => this.headlines = r.text())
+                    .catch(this.handleError);
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
+  }
+
+//////////////////////////////////////////////////////////////////////
+
+
+  ngOnInit() {
+    this.getHeadlines();
+    localStorage.clear();
+    this.validUser = true;
+    this.log = new loginData();
+    this.sign = new signData();
+    this.now = new Date();
+    this.maxDate = new Date(this.now.getFullYear() - 18, this.now.getMonth(), this.now.getDate());
+    this.loginForm = new FormGroup({
+      'loginName': new FormControl(this.log.loginName, [Validators.required, Validators.pattern(NETID_REGEX)]),
+      'loginPass': new FormControl(this.log.loginPass, [Validators.required, Validators.pattern(PASS_REGEX)])
+    });
+    let pass = new FormControl(this.sign.pass, [Validators.required]);
+    let passConf = new FormControl(this.sign.passConf, [CustomValidators.equalTo(pass)]);
+    this.signForm = new FormGroup({
+      'name': new FormControl(this.sign.name, [Validators.required, Validators.pattern(NAME_REGEX)]),
+      'disName': new FormControl(this.sign.disName, []),
+      'email': new FormControl(this.sign.email, [Validators.required, Validators.pattern(EMAIL_REGEX)]),
+      'phone': new FormControl(this.sign.phone, [Validators.required, Validators.pattern(PHONE_REGEX), CustomValidators.rangeLength([12, 12])]),
+      'birth': new FormControl(this.sign.birth, [Validators.required]),
+      'code': new FormControl(this.sign.code, [Validators.required, Validators.pattern(CODE_REGEX)]),
+      'pass': pass,
+      'passConf': passConf
+    });
+  }
+
+  get loginName() {
+    return this.loginForm.get('loginName');
+  }
+
+  get loginPass() {
+    return this.loginForm.get('loginPass');
+  }
+
+  get name() {
+    return this.signForm.get('name');
+  }
+
+  get email() {
+    return this.signForm.get('email');
+  }
+
+  get phone() {
+    return this.signForm.get('phone');
+  }
+
+  get birth() {
+    return this.signForm.get('birth');
+  }
+
+  get code() {
+    return this.signForm.get('code');
+  }
+
+  get pass() {
+    return this.signForm.get('pass');
+  }
+
+  get passConf() {
+    return this.signForm.get('passConf');
+  }
+}

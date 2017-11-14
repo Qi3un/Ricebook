@@ -1,0 +1,325 @@
+.sign-form
+{
+    width: 100%;
+    min-width: 150px;
+    max-width: 400px;
+    margin: auto;
+    margin-top: 20px;
+    padding-top: 10px;
+    padding-right: 50px;
+    padding-bottom: 30px;
+    padding-left: 50px;
+
+    background: lavender;
+}
+
+.full-width
+{
+    width: 100%;
+}
+
+.tip
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+
+    vertical-align: top;
+
+    color: red;
+}
+
+.sign-button
+{
+    font-size: 14px;
+
+    margin-top: 20px;
+
+    text-align: center;
+}
+
+h1
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 250%;
+
+    padding-bottom: 15px;
+
+    text-align: center;
+
+    color: #369;
+}
+
+h3
+{
+    font-size: 200%;
+    line-height: 30px;
+
+    margin-top: 100px;
+    margin-left: 80px;
+
+    text-align: center;
+}
+
+p
+{
+    font-family: Helvetica, Arial, sans-serif;
+}
+
+#title
+{
+    font-size: 300%;
+
+    color: white;
+}
+
+#titleSmall
+{
+    font-size: 200%;
+
+    color: white;
+}
+
+.li
+{
+    font-size: 20px;
+
+    margin-top: 50px;
+    margin-left: 100px;
+
+    color: #333;
+}
+label
+{
+    font-family: Helvetica, Arial, sans-serif;
+
+    color: white;
+}
+
+mat-expansion-panel
+{
+    /*line-height: 14px;*/
+    background: mediumturquoise;
+}
+
+#commentBox
+{
+    width: 75%;
+}
+
+.sign-in
+{
+    font-size: 14px;
+
+    color: white;
+    border: 1px solid #29487d;
+    background: #4267b2;
+}
+
+.sign-in:hover
+{
+    background: #3d5b99;
+}
+
+.sign-in:disabled,
+.sign-in[disabled]
+{
+    color: #666;
+    border: 1px solid #999;
+    background-color: #ccc;
+}
+
+#head
+{
+    padding-top: 5px;
+    padding-bottom: 0;
+
+    background: #3d5b99;
+}
+
+.message
+{
+    line-height: 14px;
+
+    color: #9cb4d8;
+}
+
+#outButt
+{
+    position: absolute;
+    right: 20px;
+    bottom: 10px;
+}
+
+mat-card
+{
+    margin-left: 50px;
+}
+
+.owner
+{
+    background: whitesmoke;
+}
+
+.follow
+{
+    background: lightgray;
+}
+
+.follow-avatar
+{
+    max-width: 100%;
+    height: auto;
+}
+
+.profile-avatar
+{
+    width: auto;
+    max-height: 90px;
+}
+
+#post
+{
+    position: absolute;
+    right: 50px;
+    bottom: 20px;
+}
+
+#cancle
+{
+    position: absolute;
+    right: 100px;
+    bottom: 20px;
+}
+
+#new-post
+{
+    padding-top: 20px;
+    padding-right: 30px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+
+    background: #add8e6;
+}
+
+#article
+{
+    background: lightseagreen;
+}
+
+.article-image
+{
+    max-width: 150px;
+    height: auto;
+}
+
+.article-table
+{
+    font-family: arial, sans-serif;
+    /*margin-left: 30px;*/
+    /*margin-right: 50px;*/
+
+    border-spacing: 10px 50px;
+    border-collapse: separate;
+}
+
+.article-td
+{
+    margin: 0 auto;
+
+    border: 0;
+}
+
+.article-td:nth-child(odd)
+{
+    padding-right: 30px;
+    padding-left: 30px;
+    /*text-align: left;*/
+    /*border-right: solid 1px #696969;*/
+}
+
+.article-td:nth-child(even)
+{
+    padding-right: 30px;
+    padding-left: 20px;
+    /*text-align: center;*/
+}
+
+.article-title
+{
+    margin-left: 0;
+
+    text-align: center;
+}
+.article-info
+{
+    text-align: center;
+}
+
+.article-text,
+.edit-textarea
+{
+    text-align: justify;
+    text-indent: 3em;
+}
+
+.commentButt
+{
+    margin-left: 3%;
+}
+
+input[type=file]
+{
+    font-size: 12px;
+
+    width: 180px;
+}
+
+#profilePic,
+.post-img
+{
+    max-width: 130px;
+    height: auto;
+}
+/*.profile-td:nth-child(odd) {
+    padding-right: 10px;
+    max-width: 100%;
+    height: auto;
+}*/
+
+.profile-td:nth-child(even)
+{
+    padding-left: 20px;
+
+    vertical-align: bottom;
+}
+
+.post-img
+{
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.edit-container
+{
+    width: 100%;
+}
+
+.edit-textarea
+{
+    font-size: 15px;
+
+    width: 100%;
+}
+
+.edit-submit
+{
+    margin-top: 10px;
+
+    text-align: right;
+    /*float: center;*/
+}
+
+.comment-edit
+{
+	float: right;
+}

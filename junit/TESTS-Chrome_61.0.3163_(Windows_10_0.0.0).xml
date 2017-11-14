@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<testsuite name="Chrome 61.0.3163 (Windows 10 0.0.0)" package="" timestamp="2017-10-30T02:44:18" id="0" hostname="Qi" tests="26" errors="0" failures="0" time="6.348">
+  <properties>
+    <property name="browser.fullName" value="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"/>
+  </properties>
+  <testcase name="AppComponent should create the app" time="0.114" classname="Chrome_61_0_3163_(Windows_10_0_0_0).AppComponent"/>
+  <testcase name="ArticleComponent should create" time="0.529" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleComponent should render articles" time="0.491" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleComponent should render follows" time="0.532" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleComponent shoud update search keyword (two-way binding)" time="0.504" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleComponent should filter displayed articles by the search keyword" time="0.562" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleComponent should dispathc action to create a new article" time="0.338" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleComponent should update headline" time="0.315" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleComponent"/>
+  <testcase name="ArticleService should be created" time="0.02" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleService"/>
+  <testcase name="ArticleService should read articles from ../assets/articles.json" time="0.053" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleService"/>
+  <testcase name="ArticleService should fetch article" time="0.023" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ArticleService"/>
+  <testcase name="FollowService should be created" time="0.014" classname="Chrome_61_0_3163_(Windows_10_0_0_0).FollowService"/>
+  <testcase name="LogoutService should be created" time="0.011" classname="Chrome_61_0_3163_(Windows_10_0_0_0).LogoutService"/>
+  <testcase name="LogoutService should log out a user and clear state" time="0.02" classname="Chrome_61_0_3163_(Windows_10_0_0_0).LogoutService"/>
+  <testcase name="OrderByPipe create an instance" time="0.002" classname="Chrome_61_0_3163_(Windows_10_0_0_0).OrderByPipe"/>
+  <testcase name="AuthComponent should create" time="0.439" classname="Chrome_61_0_3163_(Windows_10_0_0_0).AuthComponent"/>
+  <testcase name="AuthComponent shoud create empty input for name and password" time="0.292" classname="Chrome_61_0_3163_(Windows_10_0_0_0).AuthComponent"/>
+  <testcase name="AuthComponent shoue login as test user and navigate" time="0.349" classname="Chrome_61_0_3163_(Windows_10_0_0_0).AuthComponent"/>
+  <testcase name="AuthComponent should update error message" time="0.284" classname="Chrome_61_0_3163_(Windows_10_0_0_0).AuthComponent"/>
+  <testcase name="AuthComponent shoud update success message" time="0.349" classname="Chrome_61_0_3163_(Windows_10_0_0_0).AuthComponent"/>
+  <testcase name="LoginService should be created" time="0.013" classname="Chrome_61_0_3163_(Windows_10_0_0_0).LoginService"/>
+  <testcase name="LoginService should login registered user and should not login unregistered user" time="0.616" classname="Chrome_61_0_3163_(Windows_10_0_0_0).LoginService"/>
+  <testcase name="LoginService should involve mocked requests when login" time="0.256" classname="Chrome_61_0_3163_(Windows_10_0_0_0).LoginService"/>
+  <testcase name="ProfileComponent should create" time="0.196" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ProfileComponent"/>
+  <testcase name="ProfileService should be created" time="0.014" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ProfileService"/>
+  <testcase name="ProfileService should fetch user's profile information" time="0.012" classname="Chrome_61_0_3163_(Windows_10_0_0_0).ProfileService"/>
+  <system-out>
+    <![CDATA[
+]]>
+  </system-out>
+  <system-err/>
+</testsuite>

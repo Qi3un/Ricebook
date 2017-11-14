@@ -1,0 +1,103 @@
+<div class="container-fluid">
+
+	<div class="row" id="head">
+		<div class="col-sm-12" id="headContainer">
+			<div class="col-sm-6">
+				<strong><p id="title">Ricebook</p></strong>
+			</div>
+			<div class="col-sm-5"></div>
+			<div class="col-sm-1" id="outButt">
+				<button routerLink="../article">Back</button>
+			</div>
+		</div>
+	</div><br>
+
+	<div class="row">
+		<div class="col-sm-4"></div>
+		<div class="col-sm-4">
+			<form class="sign-form" [formGroup]="profileForm" #formDir="ngForm">
+				<h1><strong>Update Profile</strong></h1>
+				<table><tr>
+					<td class="profile-td">
+						<img id="profilePic" [src]="avatar" alt="Photo of Morty" class="profile-avatar">
+					</td>
+					<td class="profile-td">
+						<input type="file" accept="image/*" id="uploadPic" (change)="handleImageChange($event)">
+					</td>
+				</tr></table><hr>
+
+				<div class="row">
+					<div [hidden]="formDir.submitted">
+						<div class="form-group">
+							<mat-form-field class="full-width">
+								<input matInput id="disName" class="form-control" placeholder="Display Name" formControlName="disName" #disName_>
+				  			<mat-icon matSuffix>mood</mat-icon>
+							</mat-form-field>
+
+							<mat-form-field class="full-width">
+								<input matInput id="email" class="form-control" placeholder="E-mail" formControlName="email" #email_>
+				  			<mat-icon matSuffix>mail</mat-icon>
+							</mat-form-field>
+							<div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+								<div *ngIf="email.errors.pattern" class="tip">
+									E-mail must follow this pattern: xxx@x.x.
+								</div>
+							</div>
+
+							<mat-form-field class="full-width">
+				  			<span matPrefix>+1 &nbsp;</span>
+				  			<input id="phone" matInput calss="form-control" placeholder="Telephone" formControlName="phone" #phone_>
+				  			<mat-icon matSuffix>phone</mat-icon>
+				  		</mat-form-field>
+							<div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
+								<div *ngIf="phone.errors.pattern || phone.errors.rangeLength" class="tip">
+									Phone number must follow this pattern: 123-123-1234.
+								</div>
+							</div>
+
+							<mat-form-field class="full-width">
+								<input id="birth" matInput class="form-control" placeholder="Birthday" [maxDate]="maxDate" formControlName="birth" #birth_>
+								<mat-icon matSuffix>event</mat-icon>
+							</mat-form-field>
+							<div *ngIf="birth.invalid && (birth.dirty || birth.touched)" class="alert alert-danger">
+								<div *ngIf="birth.errors.maxDate" class="tip">
+									You're under our age limit.
+								</div>
+							</div>
+
+							<mat-form-field class="full-width">
+								<input id="code" matInput class="form-control" placeholder="Post Code" formControlName="code" #code_>
+								<mat-icon matSuffix>place</mat-icon>
+							</mat-form-field>
+							<div *ngIf="code.invalid && (code.dirty || code.touched)" class="alert alert-danger">
+								<div *ngIf="code.errors.pattern" class="tip">
+									Post code must consit of 5 digits.
+								</div>
+							</div>
+
+							<mat-form-field class="full-width">
+								<input id="pass" type="password" matInput class="form-control" placeholder="Password" formControlName="pass" #pass_>
+								<mat-icon matSuffix>lock</mat-icon>
+							</mat-form-field>
+
+							<mat-form-field class="full-width">
+								<input id="pass-conf" type="password" matInput class="form-control" placeholder="Password Confirmation" formControlName="passConf">
+								<mat-icon matSuffix>lock</mat-icon>
+							</mat-form-field>
+							<div *ngIf="passConf.invalid && (passConf.dirty || passConf.touched)" class="alert alert-danger">
+								<div *ngIf="passConf.errors.equalTo" class="tip">
+									Passwords don't match, please try again.
+								</div>
+							</div>
+						</div>
+
+						<div class="sign-button">
+							<button mat-raised-button type="button" [disabled]="profileForm.invalid" routerLink="../article" (click)="updatePro(disName_.value, email_.value, phone_.value, code_.value, pass_.value)">Submit</button>
+					    <button mat-raised-button type="button" routerLink="../article">Cancle</button>
+					  </div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

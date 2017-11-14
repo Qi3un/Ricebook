@@ -1,0 +1,24 @@
+{
+	"users": [
+		{
+			"id": 100,
+			"name": "nm1",
+			"disName": "Morty",
+			"email": "morty@rick.com",
+			"phone": "222-222-2222",
+			"birth": "2001-01-12T12:11:12.822Z",
+			"code": "22222",
+			"password": "1-2-3"
+		},
+		{
+			"id": 200,
+			"name": "nm2",
+			"disName": "Rick",
+			"email": "rick@morty.com",
+			"phone": "666-666-6666",
+			"birth": "1666-01-12T12:11:12.822Z",
+			"code": "6666",
+			"password": "1-2-3"
+		}
+	]
+}

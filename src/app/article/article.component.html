@@ -1,0 +1,195 @@
+<div class="container-fluid">
+
+	<div class="row" id="head">
+		<div class="col-sm-12" id="headContainer">
+			<div class="col-sm-6">
+				<strong><p id="titleSmall">Ricebook</p></strong>
+			</div>
+			<div class="col-sm-5"></div>
+			<div class="col-sm-1" id="outButt">
+				<button id="logoutButt" routerLink="../auth">Logout</button>
+			</div>
+		</div>
+	</div><br>
+
+	<div class="row">
+		<div class="col-sm-4">
+			<mat-card class="owner">
+				<mat-card-header>
+					<div mat-card-avatar class="header-image">
+						<img mat-card-img src="http://www.uuwtq.com/file/image/tx/3w4013592245u2536567220t28.jpg" alt="Photo of Morty" width="42px" height="45px">
+					</div>
+					<mat-card-title><a matTooltip="Edit your profile!" href="../#/profile">Morty</a></mat-card-title>
+					<mat-card-subtitle id="userStatus">{{userStatus}}</mat-card-subtitle>
+				</mat-card-header>
+				<mat-card-content>
+					<div class="row">
+						<div class="col-sm-7">
+							<mat-input-container>
+								<input id="newStatus" [(ngModel)]="newStatus" matInput placeholder="How are you doing?">
+							</mat-input-container>
+						</div>
+						<div class="col-sm-5">
+							<button id="update" color="primary" mat-button matTooltip="Update your status!" (click)="updateStatus()">
+								<mat-icon>update</mat-icon>
+							</button>
+						</div>
+					</div>
+				</mat-card-content>
+			</mat-card><br>
+
+			<div *ngFor="let follow of follows">
+				<mat-card class="follow">
+					<mat-card-header>
+						<div mat-card-avatar class="header-image">
+							<img mat-card-img [src]="follow.avatar" [alt]="follow.alt" class="follow-avatar">
+						</div>
+						<mat-card-title id="follow-title">{{follow.title}}</mat-card-title>
+						<mat-card-subtitle>{{follow.subTitle}}</mat-card-subtitle>
+					</mat-card-header>
+					<mat-card-actions>
+						<button mat-button mat-18>
+							<mat-icon mat-24 matTooltip="Share this person (〃'▽'〃)"aria-hidden="true" aria-label="share">share</mat-icon>
+						</button>
+						<button mat-button matTooltip="Unfollow this guy ￣へ￣" (click)="unfollow(follow.id, follow.title)">
+							<mat-icon mat-24>not_interested</mat-icon>
+						</button>
+					</mat-card-actions>
+				</mat-card>
+			</div><br><br>
+
+			<div class="row">
+				<div class="col-sm-3"></div>
+				<div class="col-sm-5">
+					<mat-input-container>
+						<input matInput placeholder="Who else are you interested in?" [(ngModel)]="newFollow" >
+					</mat-input-container>
+				</div> &nbsp;
+				<!-- <div class="col-sm-1"></div> -->
+				<div class="col-sm-3">
+					<button mat-button matTooltip="Follow him/her (*￣︶￣)" (click)="addFollow()">
+						<mat-icon>person_add</mat-icon>
+					</button>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="col-sm-8">
+
+			<div class="row">
+				<div class="col-sm-9"></div>
+				<div class="col-sm-3">
+					<mat-input-container class="full-width">
+						<input matInput id="searchBox" placeholder="Search" [(ngModel)]="searchBox" (keyup)="search()">
+			  			<mat-icon matSuffix>search</mat-icon>
+					</mat-input-container>
+				</div>
+			</div>
+
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-8">
+					<form id="new-post">
+						<mat-input-container class="full-width">
+							<textarea name="postInput" [(ngModel)]="postContent" matInput matTextareaAutosize minRows="4" placeholder="What's on your mind?"></textarea>
+						</mat-input-container>
+						<input type="file" id="image_upload" accept="image/*" (change)="handleImageChange($event, -1)">
+						<table class="post-table"><tr>
+							<td class="post-td">
+								<img [src]="postImg" class="post-img">
+							</td>
+							<td>
+								<button class="sign-in" id="cancle" (click)="clearPost()">Cancle</button>
+								<button class="sign-in" id="post" (click)="postArt()">Post</button>
+							</td>
+						</tr></table><br><br>
+					</form>
+				</div>
+			</div><br><br>
+
+			<div class="row">
+				<div class="col-sm-1"></div>
+				<div class="col-sm-10" id="article">
+					<table class="article-table">
+						<tr *ngFor="let article of (searchRes | orderBy)">
+							<td *ngIf="article.img || article.editing" class="article-td">
+								<img class="article-image" [src]="article.img"><br><br>
+								<div *ngIf="article.editing">
+									<button *ngIf="article.img" style="font-size: 12px; line-height: 14px" (click)="deleteImg(article._id)">
+										Delete Image
+									</button><br><br>
+									<input type="file" accept="image/*" (change)="handleImageChange($event, article._id)">
+								</div>
+							</td>
+							<td [colSpan]="article.colspan" class="article-td">
+								<h3 class="article-title">TITLE</h3>
+								<p class="article-info">{{article._id}}
+									Author: {{article.author}}
+									&nbsp;&nbsp;
+									Time: {{article.date | date}}
+									&nbsp;&nbsp;
+									<a  matTooltip="edit article" (click)="editArticle(article.author, article._id)">edit</a>
+								</p>
+								<p class="article-text" *ngIf="!article.editing">{{article.text}}</p>
+								<div *ngIf="article.editing">
+									<div>
+										<mat-input-container class="edit-container">
+											<textarea class="edit-textarea" matTextareaAutosize [(ngModel)]="article.text" matInput></textarea>
+										</mat-input-container>
+									</div>
+									<div class="edit-submit">
+										<button class="sign-in" (click)="deleteArticle(article._id)">delete</button>
+										&nbsp;
+										<button class="sign-in" (click)="cancleEdit(article._id)">cancle</button>
+										&nbsp;
+										<button class="sign-in" (click)="submitEdit(article._id)">submit</button>
+									</div><br>
+								</div><br>
+								<mat-expansion-panel>
+								  <mat-expansion-panel-header>
+								    <mat-panel-title>
+								      Comments
+								    </mat-panel-title>
+								    <mat-panel-description>
+								      Leave some comments!
+								    </mat-panel-description>
+								  </mat-expansion-panel-header>
+								  <mat-list *ngFor="let comment of article.comments">
+									  <mat-list-item>
+									    <mat-icon mat-list-icon>person</mat-icon>
+									    <h4 mat-line>
+									    	<span *ngIf="!comment.editing">
+									    		{{comment.content}}<!--  {{comment.id}} {{user.id}} -->
+									    		<span *ngIf="comment.author === user.disName">
+									    			<a class="comment-edit" matTooltip="edit comment" (click)="editComment(article.id, comment.id)">edit</a>
+									    		</span>
+									    	</span>
+									    	<span *ngIf="comment.editing">
+									    		<mat-input-container>
+									    			<input matInput [(ngModel)]="comment.content" class="comment-edit-input">
+									    		</mat-input-container>
+									    		<button class="sign-in">submit</button>
+									    	</span>
+									    </h4>
+									    <p mat-line>
+									    	<span>{{comment.author}}</span>,
+									    	<span> {{comment.date | date}}</span>
+									    </p>
+									  </mat-list-item>
+									  <mat-divider></mat-divider>
+									</mat-list><br><br>
+								  	<mat-input-container id="commentBox">
+								  		<textarea name="commentInput" id="commentInput" matInput minRows="3" placeholder="What do you think of this article?" [(ngModel)]="article.comment"></textarea>
+								  	</mat-input-container>
+										<button class="commentButt sign-in" (click)="submitComment(article._id, article.comment)">comment</button>
+								</mat-expansion-panel>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
