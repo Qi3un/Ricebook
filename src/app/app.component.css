@@ -126,6 +126,7 @@ mat-expansion-panel
     color: #666;
     border: 1px solid #999;
     background-color: #ccc;
+    cursor: not-allowed;
 }
 
 #head
@@ -184,7 +185,7 @@ mat-card
     bottom: 20px;
 }
 
-#cancle
+#cancel
 {
     position: absolute;
     right: 100px;
@@ -208,7 +209,7 @@ mat-card
 
 .article-image
 {
-    max-width: 150px;
+    max-width: 200px;
     height: auto;
 }
 
@@ -225,21 +226,20 @@ mat-card
 .article-td
 {
     margin: 0 auto;
-
     border: 0;
 }
 
 .article-td:nth-child(odd)
 {
-    padding-right: 30px;
-    padding-left: 30px;
+    padding-right: 10px;
+    padding-left: 10px;
     /*text-align: left;*/
     /*border-right: solid 1px #696969;*/
 }
 
 .article-td:nth-child(even)
 {
-    padding-right: 30px;
+    padding-right: 10px;
     padding-left: 20px;
     /*text-align: center;*/
 }
@@ -260,6 +260,8 @@ mat-card
 {
     text-align: justify;
     text-indent: 3em;
+    word-break: break-all;
+    white-space: normal;
 }
 
 .commentButt
@@ -319,7 +321,25 @@ input[type=file]
     /*float: center;*/
 }
 
+.article-edit-butt
+{
+    cursor: pointer;
+}
+
 .comment-edit
 {
 	float: right;
+    font-size: 12px;
+    margin-left: 5px;
+    cursor: pointer;
+}
+
+.comment-edit-span
+{
+    width: 100%;
+}
+
+.comment-edit-input
+{
+    width: 50%;
 }

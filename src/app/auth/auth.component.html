@@ -1,19 +1,18 @@
-{{headlines}}
-
 <div class="container-fluid">
 	<div class="row" id="head">
 		<div class="col-sm-12">
 			<div class="col-sm-6">
 				<strong><p id="title">Ricebook</p></strong>
 			</div>
-			<div class="col-sm-1"></div>
-			<div class="col-sm-5">
+			<!-- <div class="col-sm-1"></div> -->
+			<div class="col-sm-6">
 				<br>
 				<form class="login" [formGroup]="loginForm" #formDir="ngForm">
-					<input id="loginName" name="loginName" placeholder="Name" formControlName="loginName" required #loginName_ (keyup)="reset()"> &nbsp;&nbsp;&nbsp;
-					<input id="loginPass" type="password" name="loginPass" placeholder="Password" formControlName="loginPass" required #loginPass_ (keyup)="reset()"> &nbsp;&nbsp;&nbsp;
+					<input id="loginName" name="loginName" placeholder="Name" formControlName="loginName" required #loginName_> &nbsp;&nbsp;&nbsp;
+					<input id="loginPass" type="password" name="loginPass" placeholder="Password" formControlName="loginPass" required #loginPass_> &nbsp;&nbsp;&nbsp;
 					<!-- <input type="submit" name="submit" value="Login"> -->
-					<button type="button" class="sign-in" [disabled]="loginForm.invalid" (click)="verify(loginName_.value, loginPass_.value)">Login</button><br>
+					<button id="login-button" type="button" class="sign-in" [disabled]="loginForm.invalid" (click)="verify(loginName_.value, loginPass_.value)">Login</button>&nbsp;
+					<button id="login-button" type="button" class="sign-in" (click)="loginFacebook()">Login with Facebook</button><br>
 					<span class="message" id="nameMessage" *ngIf="loginName.invalid && (loginName.dirty || loginName.touched)">
 						<span *ngIf="loginName.errors.required">
 							Please sign up if you don't have an account.
@@ -21,17 +20,20 @@
 						<span *ngIf="loginName.errors.pattern">
 							Name should be your NetID.
 						</span>
+						<span id="verifyMessage" *ngIf="loginName.errors.notExist">
+							QAQ.. Seems the name you input doesn't exist.
+						</span>
 					</span>
-					<span class="message" id="pwdMessage" *ngIf="!loginName.invalid && loginPass.invalid && (loginPass.dirty || loginPass.touched)">
+					<span class="message" id="pwdMessage" *ngIf="loginName.valid && loginPass.invalid && (loginPass.dirty || loginPass.touched)">
 						<span *ngIf="loginPass.errors.required">
 							Please sign up if you don't have an account.
 						</span>
 						<span *ngIf="loginPass.errors.pattern">
 							Password should be like "x-x-x".
 						</span>
-					</span>
-					<span class="message" id="verifyMessage" *ngIf="loginForm.valid && !validUser">
-						QAQ.. Seems the name or password you input is incorrect.
+						<span id="verifyMessage" *ngIf="loginPass.errors.wrong">
+							QAQ.. Seems the password you input is incorrect.
+						</span>
 					</span>
 					<span class="message" id="successMessage" *ngIf="loginForm.valid && validUser">
 						You are ready to login!
@@ -50,111 +52,120 @@
 		</div>
 
 		<div class="col-sm-7">
-		<form class="sign-form" [formGroup]="signForm" #formDir="ngForm">
-			<h1><strong>SIGN UP</strong></h1>
+			<form class="sign-form" [formGroup]="signForm" #formDir="ngForm">
+				<h1><strong>SIGN UP</strong></h1>
 
-			<div [hidden]="formDir.submitted">
-				<div class="form-group">
-					<mat-form-field class="full-width">
-						<input matInput id="name" class="form-control" placeholder="Name" formControlName="name" required #name_>
-		  			<mat-icon matSuffix>person</mat-icon>
-					</mat-form-field>
-					<div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
-						<div *ngIf="name.errors.required" class="tip">
-							Name is required.
+				<div [hidden]="formDir.submitted">
+					<div class="form-group">
+						<mat-form-field class="full-width">
+							<input matInput id="name" class="form-control" placeholder="Name" formControlName="name" required #name_>
+			  			<mat-icon matSuffix>person</mat-icon>
+						</mat-form-field>
+						<div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+							<div *ngIf="name.errors.required" class="tip">
+								Name is required.
+							</div>
+							<div *ngIf="name.errors.pattern" class="tip">
+								Account name can only be upper or lower case letters and numbers, and should not start with a number.
+							</div>
+							<div *ngIf="name.errors.unique" class="tip">
+								Account name already exists, please choose another one!
+							</div>
 						</div>
-						<div *ngIf="name.errors.pattern" class="tip">
-							Account name can only be upper or lower case letters and numbers, but should not start with a number.
+
+						<mat-form-field class="full-width">
+					  		<input matInput id="disName" placeholder="Display Name" class="form-control" formControlName="disName" #disName_>
+			  				<mat-icon matSuffix>mood</mat-icon>
+					  </mat-form-field>
+
+						<mat-form-field class="full-width">
+							<input matInput id="email" class="form-control" placeholder="E-mail" formControlName="email" required #email_>
+			  			<mat-icon matSuffix>mail</mat-icon>
+						</mat-form-field>
+						<div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
+							<div *ngIf="email.errors.required" class="tip">
+								E-mail is required.
+							</div>
+							<div *ngIf="email.errors.pattern" class="tip">
+								E-mail must follow this pattern: xxx@x.x.
+							</div>
+						</div>
+
+						<mat-form-field class="full-width">
+			  			<span matPrefix>+1 &nbsp;</span>
+			  			<input id="phone" matInput calss="form-control" placeholder="Telephone" formControlName="phone" required #phone_>
+			  			<mat-icon matSuffix>phone</mat-icon>
+			  		</mat-form-field>
+						<div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
+							<div *ngIf="phone.errors.required" class="tip">
+								Phone number is required.
+							</div>
+							<div *ngIf="phone.errors.pattern || phone.errors.rangeLength" class="tip">
+								Phone number must follow this pattern: 123-123-1234.
+							</div>
+						</div>
+
+						<mat-form-field class="full-width">
+							<input id="birth" type="date" matInput class="form-control" placeholder="Birthday" [maxDate]="maxDate" formControlName="birth" required #birth_>
+							<mat-icon matSuffix>event</mat-icon>
+						</mat-form-field>
+						<div *ngIf="birth.invalid && (birth.dirty || birth.touched)" class="alert alert-danger">
+							<div *ngIf="birth.errors.required" class="tip">
+								Birthday is required.
+							</div>
+							<div *ngIf="birth.errors.maxDate" class="tip">
+								You're under our age limit.
+							</div>
+						</div>
+
+						<mat-form-field class="full-width">
+							<input id="code" matInput class="form-control" placeholder="Post Code" formControlName="code" required #code_>
+							<mat-icon matSuffix>place</mat-icon>
+						</mat-form-field>
+						<div *ngIf="code.invalid && (code.dirty || code.touched)" class="alert alert-danger">
+							<div *ngIf="code.errors.required" class="tip">
+								Post code number is required.
+							</div>
+							<div *ngIf="code.errors.pattern" class="tip">
+								Post code must consit of 5 digits.
+							</div>
+						</div>
+
+						<mat-form-field class="full-width">
+							<input id="pass" type="password" matInput class="form-control" placeholder="Password" formControlName="pass" required #pass_>
+							<mat-icon matSuffix>lock</mat-icon>
+						</mat-form-field>
+						<div *ngIf="pass.invalid && (pass.dirty || pass.touched)" class="alert alert-danger">
+							<div *ngIf="pass.errors.required" class="tip">
+								Password is required.
+							</div>
+							<div *ngIf="pass.errors.pattern" class="tip">
+								Password should be seperate by '-', i.e, '1-2-3'.
+							</div>
+						</div>
+
+						<mat-form-field class="full-width">
+							<input id="pass-conf" type="password" matInput class="form-control" placeholder="Confirm Password" formControlName="passConf" required>
+							<mat-icon matSuffix>lock</mat-icon>
+						</mat-form-field>
+						<div *ngIf="passConf.invalid && (passConf.dirty || passConf.touched)" class="alert alert-danger">
+							<div *ngIf="passConf.errors.equalTo" class="tip">
+								Passwords don't match, please try again.
+							</div>
 						</div>
 					</div>
 
-					<mat-form-field class="full-width">
-				  		<input matInput id="disName" placeholder="Display Name" class="form-control" formControlName="disName" #disName_>
-		  				<mat-icon matSuffix>mood</mat-icon>
-				  </mat-form-field>
-
-					<mat-form-field class="full-width">
-						<input matInput id="email" class="form-control" placeholder="E-mail" formControlName="email" required #email_>
-		  			<mat-icon matSuffix>mail</mat-icon>
-					</mat-form-field>
-					<div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
-						<div *ngIf="email.errors.required" class="tip">
-							E-mail is required.
-						</div>
-						<div *ngIf="email.errors.pattern" class="tip">
-							E-mail must follow this pattern: xxx@x.x.
-						</div>
-					</div>
-
-					<mat-form-field class="full-width">
-		  			<span matPrefix>+1 &nbsp;</span>
-		  			<input id="phone" matInput calss="form-control" placeholder="Telephone" formControlName="phone" required #phone_>
-		  			<mat-icon matSuffix>phone</mat-icon>
-		  		</mat-form-field>
-					<div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
-						<div *ngIf="phone.errors.required" class="tip">
-							Phone number is required.
-						</div>
-						<div *ngIf="phone.errors.pattern || phone.errors.rangeLength" class="tip">
-							Phone number must follow this pattern: 123-123-1234.
-						</div>
-					</div>
-
-					<mat-form-field class="full-width">
-						<input id="birth" type="date" matInput class="form-control" placeholder="Birthday" [maxDate]="maxDate" formControlName="birth" required #birth_>
-						<mat-icon matSuffix>event</mat-icon>
-					</mat-form-field>
-					<div *ngIf="birth.invalid && (birth.dirty || birth.touched)" class="alert alert-danger">
-						<div *ngIf="birth.errors.required" class="tip">
-							Birthday is required.
-						</div>
-						<div *ngIf="birth.errors.maxDate" class="tip">
-							You're under our age limit.
-						</div>
-					</div>
-
-					<mat-form-field class="full-width">
-						<input id="code" matInput class="form-control" placeholder="Post Code" formControlName="code" required #code_>
-						<mat-icon matSuffix>place</mat-icon>
-					</mat-form-field>
-					<div *ngIf="code.invalid && (code.dirty || code.touched)" class="alert alert-danger">
-						<div *ngIf="code.errors.required" class="tip">
-							Post code number is required.
-						</div>
-						<div *ngIf="code.errors.pattern" class="tip">
-							Post code must consit of 5 digits.
-						</div>
-					</div>
-
-					<mat-form-field class="full-width">
-						<input id="pass" type="password" matInput class="form-control" placeholder="Password" formControlName="pass" required #pass_>
-						<mat-icon matSuffix>lock</mat-icon>
-					</mat-form-field>
-					<div *ngIf="pass.invalid && (pass.dirty || pass.touched)" class="alert alert-danger">
-						<div *ngIf="pass.errors.required" class="tip">
-							Password is required.
-						</div>
-					</div>
-
-					<mat-form-field class="full-width">
-						<input id="pass-conf" type="password" matInput class="form-control" placeholder="Confirm Password" formControlName="passConf" required>
-						<mat-icon matSuffix>lock</mat-icon>
-					</mat-form-field>
-					<div *ngIf="passConf.invalid && (passConf.dirty || passConf.touched)" class="alert alert-danger">
-						<div *ngIf="passConf.errors.equalTo" class="tip">
-							Passwords don't match, please try again.
-						</div>
-					</div>
+					<div class="sign-button">
+						<button id="submit" mat-raised-button type="button" [disabled]="signForm.invalid" (click)="register()">
+							Submit
+						</button>
+				    	<button id="reset" mat-raised-button type="button" class="btn btn-default" (click)="formDir.resetForm({})">
+				    		Reset
+				    	</button>
+				  	</div>
 				</div>
-
-				<div class="sign-button">
-<!-- 					<button mat-raised-button type="button" [disabled]="signForm.invalid" routerLink="../article" (click)="storeInfo(name_.value, disName_.value, email_.value, phone_.value, birth_.value, code_.value, pass_.value)">Submit</button> -->
-					<button mat-raised-button type="button" [disabled]="signForm.invalid" routerLink="../article">Submit</button>
-			    <button mat-raised-button type="button" class="btn btn-default" (click)="formDir.resetForm({})">Reset</button>
-			  </div>
-			</div>
-		</form>
+			</form>
+		</div>
 	</div>
 </div>
-
 

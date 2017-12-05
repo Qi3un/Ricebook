@@ -1,22 +1,30 @@
 import { Injectable } from '@angular/core';
-import { resource } from '../resources';
 import { Headers, Http } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+import { url, option } from '../auth/login.service';
+import { CookieService } from 'ngx-cookie-service';
 
 @Injectable()
 export class LogoutService {
 
-  constructor() { }
+  constructor(private http: Http,
+              private cookieService: CookieService) { }
 
   logout(): Promise<any> {
-    return resource('PUT', 'logout','')
-    	.then(r => {
-    		localStorage.clear();
-    		return JSON.parse(r).sucess === "true";
-    	})
-    	.catch(this.handleError);
+    return this.http.put(url('logout'), "", option)
+                    .toPromise()
+                    .then(res => {
+                      if(res.status === 200) {
+                        this.cookieService.deleteAll()
+                        return true
+                      }
+                      else {
+                        return false
+                      }
+                    })
+                    .catch(this.handleError)
   }
 
   private handleError(error: any): Promise<any> {

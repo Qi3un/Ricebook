@@ -19,7 +19,7 @@
 				<h1><strong>Update Profile</strong></h1>
 				<table><tr>
 					<td class="profile-td">
-						<img id="profilePic" [src]="avatar" alt="Photo of Morty" class="profile-avatar">
+						<img *ngIf="avatar || user.avatar" id="profilePic" [src]="avatar || user.avatar" alt="avatar" class="profile-avatar">
 					</td>
 					<td class="profile-td">
 						<input type="file" accept="image/*" id="uploadPic" (change)="handleImageChange($event)">
@@ -30,12 +30,12 @@
 					<div [hidden]="formDir.submitted">
 						<div class="form-group">
 							<mat-form-field class="full-width">
-								<input matInput id="disName" class="form-control" placeholder="Display Name" formControlName="disName" #disName_>
+								<input matInput id="disName" class="form-control" placeholder="Display Name" formControlName="disName" [(ngModel)]="user.disName" #disName_>
 				  			<mat-icon matSuffix>mood</mat-icon>
 							</mat-form-field>
 
 							<mat-form-field class="full-width">
-								<input matInput id="email" class="form-control" placeholder="E-mail" formControlName="email" #email_>
+								<input matInput id="email" class="form-control" placeholder="E-mail" formControlName="email" [(ngModel)]="user.email" #email_>
 				  			<mat-icon matSuffix>mail</mat-icon>
 							</mat-form-field>
 							<div *ngIf="email.invalid && (email.dirty || email.touched)" class="alert alert-danger">
@@ -45,10 +45,10 @@
 							</div>
 
 							<mat-form-field class="full-width">
-				  			<span matPrefix>+1 &nbsp;</span>
-				  			<input id="phone" matInput calss="form-control" placeholder="Telephone" formControlName="phone" #phone_>
-				  			<mat-icon matSuffix>phone</mat-icon>
-				  		</mat-form-field>
+					  			<span matPrefix>+1 &nbsp;</span>
+					  			<input id="phone" matInput calss="form-control" placeholder="Telephone" formControlName="phone" [(ngModel)]="user.phone" #phone_>
+					  			<mat-icon matSuffix>phone</mat-icon>
+				  			</mat-form-field>
 							<div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="alert alert-danger">
 								<div *ngIf="phone.errors.pattern || phone.errors.rangeLength" class="tip">
 									Phone number must follow this pattern: 123-123-1234.
@@ -56,17 +56,12 @@
 							</div>
 
 							<mat-form-field class="full-width">
-								<input id="birth" matInput class="form-control" placeholder="Birthday" [maxDate]="maxDate" formControlName="birth" #birth_>
+								<input id="birth" matInput class="form-control" placeholder="Birthday" formControlName="birth" [value]="user.birth" #birth_>
 								<mat-icon matSuffix>event</mat-icon>
 							</mat-form-field>
-							<div *ngIf="birth.invalid && (birth.dirty || birth.touched)" class="alert alert-danger">
-								<div *ngIf="birth.errors.maxDate" class="tip">
-									You're under our age limit.
-								</div>
-							</div>
 
 							<mat-form-field class="full-width">
-								<input id="code" matInput class="form-control" placeholder="Post Code" formControlName="code" #code_>
+								<input id="code" matInput class="form-control" placeholder="Post Code" formControlName="code" [(ngModel)]="user.code" #code_>
 								<mat-icon matSuffix>place</mat-icon>
 							</mat-form-field>
 							<div *ngIf="code.invalid && (code.dirty || code.touched)" class="alert alert-danger">
@@ -76,7 +71,7 @@
 							</div>
 
 							<mat-form-field class="full-width">
-								<input id="pass" type="password" matInput class="form-control" placeholder="Password" formControlName="pass" #pass_>
+								<input id="pass" type="password" matInput class="form-control" placeholder="Password" formControlName="pass">
 								<mat-icon matSuffix>lock</mat-icon>
 							</mat-form-field>
 
@@ -92,7 +87,7 @@
 						</div>
 
 						<div class="sign-button">
-							<button mat-raised-button type="button" [disabled]="profileForm.invalid" routerLink="../article" (click)="updatePro(disName_.value, email_.value, phone_.value, code_.value, pass_.value)">Submit</button>
+							<button id="submit" mat-raised-button type="button" [disabled]="profileForm.invalid" (click)="updatePro()">Save</button>
 					    <button mat-raised-button type="button" routerLink="../article">Cancle</button>
 					  </div>
 					</div>

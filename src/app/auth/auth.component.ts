@@ -26,6 +26,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { resource } from '../resources';
+import { MatSnackBar } from '@angular/material';
 
 export const NAME_REGEX = /[a-zA-Z][a-zA-Z0-9]*/;
 export const EMAIL_REGEX = /\w+@\w+\.\w+/;
@@ -61,7 +62,8 @@ export class AuthComponent implements OnInit {
     private loginService: LoginService,
     private router: Router,
     private route: ActivatedRoute,
-    private http: Http
+    private http: Http,
+    private snackBar: MatSnackBar
   ) {}
 
   sign: signData;
@@ -72,41 +74,7 @@ export class AuthComponent implements OnInit {
   now: Date;
   validUser: boolean;
 
-  verify(name: string, password: string): void {
-    this.validUser = this.loginService.login(name, password);
-    if (this.validUser) {
-      this.router.navigate(['../article'], {
-        relativeTo: this.route
-      });
-    }
-  }
-
-  reset() {
-    this.validUser = true;
-  }
-
-/////////////////////////////////////////////////////////////////////
-
-  /* this is for test the cross origin resource sharing */
-  headlines: string;
-  getHeadlines(): Promise<string> {
-
-    return this.http.get("http://localhost:3000/headlines")
-                    .toPromise()
-                    .then(r => this.headlines = r.text())
-                    .catch(this.handleError);
-  }
-
-  private handleError(error: any): Promise<any> {
-    console.error('An error occurred', error); // for demo purposes only
-    return Promise.reject(error.message || error);
-  }
-
-//////////////////////////////////////////////////////////////////////
-
-
   ngOnInit() {
-    this.getHeadlines();
     localStorage.clear();
     this.validUser = true;
     this.log = new loginData();
@@ -117,7 +85,7 @@ export class AuthComponent implements OnInit {
       'loginName': new FormControl(this.log.loginName, [Validators.required, Validators.pattern(NETID_REGEX)]),
       'loginPass': new FormControl(this.log.loginPass, [Validators.required, Validators.pattern(PASS_REGEX)])
     });
-    let pass = new FormControl(this.sign.pass, [Validators.required]);
+    let pass = new FormControl(this.sign.pass, [Validators.pattern(PASS_REGEX), Validators.required]);
     let passConf = new FormControl(this.sign.passConf, [CustomValidators.equalTo(pass)]);
     this.signForm = new FormGroup({
       'name': new FormControl(this.sign.name, [Validators.required, Validators.pattern(NAME_REGEX)]),
@@ -129,6 +97,49 @@ export class AuthComponent implements OnInit {
       'pass': pass,
       'passConf': passConf
     });
+  }
+
+  register(): void {
+    this.loginService
+    .register(this.signForm.value)
+    .then(r => {
+      if(r) {
+        this.snackBar.open("Registration succeed! you can log in now!", null, { duration: 3000})
+        this.signForm.reset()
+      }
+      else {
+        this.signForm.controls['name'].setErrors({'unique': true})
+      }
+    })
+    .catch(this.handleError)
+  }
+
+  verify(name: string, password: string): void {
+    this.loginService.login(name, password)
+    .then(r => {
+      console.log(r)
+      if (r === "success") {
+        this.router.navigate(['../article'], {
+          relativeTo: this.route
+        });
+      }
+      else if(r.includes("no such user")) {
+        this.loginForm.controls['loginName'].setErrors({ 'notExist': true });
+      }
+      else if(r === "wrong password") {
+        this.loginForm.controls['loginPass'].setErrors({ 'wrong': true });
+      }
+    })
+  }
+
+  loginFacebook(): void {
+    this.loginService
+        .loginFacebook()
+  }
+
+  private handleError(error: any): Promise<any> {
+    console.error('An error occurred', error); // for demo purposes only
+    return Promise.reject(error.message || error);
   }
 
   get loginName() {

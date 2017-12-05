@@ -1,11 +1,12 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { article } from './article';
 
 @Pipe({
   name: 'orderBy'
 })
 export class OrderByPipe implements PipeTransform {
 
-  transform(array: Array<string>, args: string): Array<string> {
+  transform(array: Array<article>, args: article): Array<article> {
 	  if(!array || array === undefined || array.length === 0) return null;
 
 	    array.sort((a: any, b: any) => {

@@ -4,47 +4,56 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 import { user } from './user';
-import { resource } from '../resources';
+
+// var url = (endpoint) => `http://localhost:3000/` + endpoint;
+var url = (endpoint) => `https://ricebook233-backend.herokuapp.com/` + endpoint;
+
+var option = {
+  'headers': new Headers({
+    'Accept': 'aplication/json',
+    'Content-Type': 'application/json'
+  }), 'withCredentials': true };
 
 @Injectable()
 export class LoginService {
 
-	private userUrl = 'assets/users.json';
-  users: user[] = [];
-  validUser: boolean;
+  constructor(private http: Http ) { }
 
-  constructor(private http: Http) {
-    this.getUsers();
+  login(name: string, password: string): Promise<string> {
+    return this.http.post(url('login'), JSON.stringify({ username: name, password: password}), option)
+                    .toPromise()
+                    .then(r => {
+                      if(r.status === 200) {
+                        localStorage.user = r.json().username;
+                        return r.json().result;
+                      }
+                      else {
+                        return r.text();
+                      }
+                    })
+                    .catch(this.handleError)
   }
 
-  login(name: string, password: string): boolean {
-    this.validUser = false;
-    let usr = this.users.filter(u => (u.name == name));
-    if(usr.length == 1 && usr[0].password === password){
-      this.validUser = true;
-      localStorage.setItem("user", JSON.stringify(usr[0]));
-    }
-    return this.validUser;
+  register(user: user): Promise<boolean> {
+    return this.http.post(url("register"), JSON.stringify(user), option)
+                    .toPromise()
+                    .then(r => r.json())
+                    .then(r => {
+                      console.log("username", r.username)
+                      console.log("result", r.result)
+                      if(r.username == user.name && r.result == "success") {
+                        return true
+                      }
+                      else {
+                        return false
+                      }
+                    })
+                    .catch(this.handleError);
   }
 
-  mockLogin = (name: string, password: string) => {
-    this.validUser = false;
-    return resource('POST', 'login', {
-        username: name,
-        password: password
-    })
-    .then(r => {
-        this.validUser = (JSON.parse(r).valid === "true");
-    })
-    .catch(this.handleError);
-  }
-
-  getUsers(): Promise<user[]> {
-  	return this.http.get(this.userUrl)
-  									.toPromise()
-  									.then(response => response.json().users as user[])
-                    .then(users => this.users = users)
-  									.catch(this.handleError);
+  loginFacebook(): void {
+    // window.location.href = "http://localhost:3000/loginFacebook";
+    window.location.href = "https://ricebook233-backend.herokuapp.com/loginFacebook";
   }
 
   private handleError(error: any): Promise<any> {
@@ -52,3 +61,5 @@ export class LoginService {
     return Promise.reject(error.message || error);
   }
 }
+
+export { url, option }

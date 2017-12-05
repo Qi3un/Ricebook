@@ -7,7 +7,7 @@
 			</div>
 			<div class="col-sm-5"></div>
 			<div class="col-sm-1" id="outButt">
-				<button id="logoutButt" routerLink="../auth">Logout</button>
+				<button id="logoutButt" (click)="logoutService.logout()" routerLink="../auth">Logout</button>
 			</div>
 		</div>
 	</div><br>
@@ -17,22 +17,24 @@
 			<mat-card class="owner">
 				<mat-card-header>
 					<div mat-card-avatar class="header-image">
-						<img mat-card-img src="http://www.uuwtq.com/file/image/tx/3w4013592245u2536567220t28.jpg" alt="Photo of Morty" width="42px" height="45px">
+						<img *ngIf="profile.avatar" mat-card-img [src]="profile.avatar" alt="Photo of Morty" width="42px" height="45px">
 					</div>
-					<mat-card-title><a matTooltip="Edit your profile!" href="../#/profile">Morty</a></mat-card-title>
-					<mat-card-subtitle id="userStatus">{{userStatus}}</mat-card-subtitle>
+					<mat-card-title><a id="edit-profile-butt" matTooltip="Edit your profile!" href="../#/profile">{{profile.disName}}</a></mat-card-title>
+					<mat-card-subtitle id="userStatus">{{profile.headline}}</mat-card-subtitle>
 				</mat-card-header>
 				<mat-card-content>
 					<div class="row">
-						<div class="col-sm-7">
+						<div class="col-sm-6">
 							<mat-input-container>
 								<input id="newStatus" [(ngModel)]="newStatus" matInput placeholder="How are you doing?">
 							</mat-input-container>
 						</div>
-						<div class="col-sm-5">
+						<div class="col-sm-6">
 							<button id="update" color="primary" mat-button matTooltip="Update your status!" (click)="updateStatus()">
 								<mat-icon>update</mat-icon>
 							</button>
+							<img class="img-link" src="https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico" *ngIf="!profile.fbID" matTooltip="link current account to your Facebook account" (click)="linkService.link()">
+							<img class="img-link" src="https://static.xx.fbcdn.net/rsrc.php/yl/r/H3nktOa7ZMg.ico" *ngIf="profile.fbID && profile.fbID !== profile.name" matTooltip="unlink current account from your Facebook account" (click)="unlink()">
 						</div>
 					</div>
 				</mat-card-content>
@@ -48,10 +50,13 @@
 						<mat-card-subtitle>{{follow.subTitle}}</mat-card-subtitle>
 					</mat-card-header>
 					<mat-card-actions>
-						<button mat-button mat-18>
-							<mat-icon mat-24 matTooltip="Share this person (〃'▽'〃)"aria-hidden="true" aria-label="share">share</mat-icon>
+						<button mat-button matTooltip="follow closely with him/her (*/ω＼*)">
+							<mat-icon mat-24>favorite_border</mat-icon>
 						</button>
-						<button mat-button matTooltip="Unfollow this guy ￣へ￣" (click)="unfollow(follow.id, follow.title)">
+						<button mat-button matTooltip="Share this person (〃'▽'〃)">
+							<mat-icon mat-24>share</mat-icon>
+						</button>
+						<button id="unfollow-butt" mat-button matTooltip="Unfollow this guy ￣へ￣" (click)="unfollow(follow.id, follow.name)">
 							<mat-icon mat-24>not_interested</mat-icon>
 						</button>
 					</mat-card-actions>
@@ -62,12 +67,12 @@
 				<div class="col-sm-3"></div>
 				<div class="col-sm-5">
 					<mat-input-container>
-						<input matInput placeholder="Who else are you interested in?" [(ngModel)]="newFollow" >
+						<input id="new-follow-input" matInput placeholder="Who else are you interested in?" [(ngModel)]="newFollow" >
 					</mat-input-container>
 				</div> &nbsp;
 				<!-- <div class="col-sm-1"></div> -->
 				<div class="col-sm-3">
-					<button mat-button matTooltip="Follow him/her (*￣︶￣)" (click)="addFollow()">
+					<button id="new-follow-butt" mat-button matTooltip="Follow him/her (*￣︶￣)" (click)="addFollow()">
 						<mat-icon>person_add</mat-icon>
 					</button>
 				</div>
@@ -92,15 +97,15 @@
 				<div class="col-sm-8">
 					<form id="new-post">
 						<mat-input-container class="full-width">
-							<textarea name="postInput" [(ngModel)]="postContent" matInput matTextareaAutosize minRows="4" placeholder="What's on your mind?"></textarea>
+							<textarea id="postInput" name="postInput" [(ngModel)]="postContent" matInput matTextareaAutosize minRows="4" placeholder="What's on your mind?" #text_></textarea>
 						</mat-input-container>
-						<input type="file" id="image_upload" accept="image/*" (change)="handleImageChange($event, -1)">
+						<input name="image_upload" type="file" id="image_upload" accept="image/*" (change)="handleImageChange($event, -1)" [(ngModel)]="image_upload" #img_>
 						<table class="post-table"><tr>
-							<td class="post-td">
+							<td class="post-td" *ngIf="postImg">
 								<img [src]="postImg" class="post-img">
 							</td>
 							<td>
-								<button class="sign-in" id="cancle" (click)="clearPost()">Cancle</button>
+								<button class="sign-in" id="cancel" (click)="clearPost()">Cancel</button>
 								<button class="sign-in" id="post" (click)="postArt()">Post</button>
 							</td>
 						</tr></table><br><br>
@@ -111,10 +116,10 @@
 			<div class="row">
 				<div class="col-sm-1"></div>
 				<div class="col-sm-10" id="article">
-					<table class="article-table">
-						<tr *ngFor="let article of (searchRes | orderBy)">
+					<table class="article-table col-sm-12">
+						<tr *ngFor="let article of searchRes">
 							<td *ngIf="article.img || article.editing" class="article-td">
-								<img class="article-image" [src]="article.img"><br><br>
+								<img *ngIf="article.img" id="article-image" class="article-image" [src]="article.img"><br><br>
 								<div *ngIf="article.editing">
 									<button *ngIf="article.img" style="font-size: 12px; line-height: 14px" (click)="deleteImg(article._id)">
 										Delete Image
@@ -124,26 +129,26 @@
 							</td>
 							<td [colSpan]="article.colspan" class="article-td">
 								<h3 class="article-title">TITLE</h3>
-								<p class="article-info">{{article._id}}
+								<p class="article-info">
 									Author: {{article.author}}
 									&nbsp;&nbsp;
 									Time: {{article.date | date}}
 									&nbsp;&nbsp;
-									<a  matTooltip="edit article" (click)="editArticle(article.author, article._id)">edit</a>
+									<a class="article-edit-butt" *ngIf="article.name === profile.name" matTooltip="edit article" (click)="editArticle(article.name, article._id)">edit</a>
 								</p>
-								<p class="article-text" *ngIf="!article.editing">{{article.text}}</p>
+								<p id="article-text" class="article-text" *ngIf="!article.editing">{{article.text}}</p>
 								<div *ngIf="article.editing">
 									<div>
 										<mat-input-container class="edit-container">
-											<textarea class="edit-textarea" matTextareaAutosize [(ngModel)]="article.text" matInput></textarea>
+											<textarea id="article-edit-area" class="edit-textarea" matTextareaAutosize [(ngModel)]="article.text" matInput></textarea>
 										</mat-input-container>
 									</div>
 									<div class="edit-submit">
 										<button class="sign-in" (click)="deleteArticle(article._id)">delete</button>
 										&nbsp;
-										<button class="sign-in" (click)="cancleEdit(article._id)">cancle</button>
+										<button class="sign-in" (click)="cancelEdit(article._id)">cancel</button>
 										&nbsp;
-										<button class="sign-in" (click)="submitEdit(article._id)">submit</button>
+										<button id="submitEditButt" class="sign-in" (click)="submitEdit(article._id)">submit</button>
 									</div><br>
 								</div><br>
 								<mat-expansion-panel>
@@ -160,21 +165,23 @@
 									    <mat-icon mat-list-icon>person</mat-icon>
 									    <h4 mat-line>
 									    	<span *ngIf="!comment.editing">
-									    		{{comment.content}}<!--  {{comment.id}} {{user.id}} -->
-									    		<span *ngIf="comment.author === user.disName">
-									    			<a class="comment-edit" matTooltip="edit comment" (click)="editComment(article.id, comment.id)">edit</a>
+									    		{{comment.content}}
+									    		<span *ngIf="comment.name === profile.name">
+									    			<a class="comment-edit" matTooltip="delete comment" (click)="deleteComment(article._id, comment.id)">delete</a>&nbsp;&nbsp;
+									    			<a class="comment-edit" matTooltip="edit comment" (click)="editComment(article._id, comment.id)">edit</a>
 									    		</span>
 									    	</span>
-									    	<span *ngIf="comment.editing">
-									    		<mat-input-container>
-									    			<input matInput [(ngModel)]="comment.content" class="comment-edit-input">
+									    	<span *ngIf="comment.editing" class="comment-edit-span">
+									    		<mat-input-container class="comment-edit-input">
+									    			<input matInput [(ngModel)]="comment.content">
 									    		</mat-input-container>
-									    		<button class="sign-in">submit</button>
+									    		<button class="commentButt sign-in" (click)="cancelEditComment(article._id, comment.id)">cancel</button>
+									    		<button class="commentButt sign-in" (click)="submitEditComment(article._id, comment.id)">submit</button>
 									    	</span>
 									    </h4>
-									    <p mat-line>
+									    <p mat-line *ngIf="!comment.editing"><i>
 									    	<span>{{comment.author}}</span>,
-									    	<span> {{comment.date | date}}</span>
+									    	<span> {{comment.date | date}}</span></i>
 									    </p>
 									  </mat-list-item>
 									  <mat-divider></mat-divider>
