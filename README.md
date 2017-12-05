@@ -1,6 +1,6 @@
 # Guidence
 
-This frontend application [Ricebook](ricebook233.surge.sh) is deployed on surge. The you can now experience it with test user (name: nm2, password: 1-2-3) or register a new account yourself.
+This frontend application [Ricebook](http://ricebook233.surge.sh) is deployed on surge. The you can now experience it with test user (name: nm2, password: 1-2-3) or register a new account yourself.
 
 # Review
   	1. https://hz56hw6.surge.sh
